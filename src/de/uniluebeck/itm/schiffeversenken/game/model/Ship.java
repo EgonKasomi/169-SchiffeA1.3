@@ -27,6 +27,7 @@ public class Ship {
 	 */
 	public Ship(int length, boolean orientation) {
 		
+		//these are the new params for the constructor
 		length = this.length;
 
 		orientation = this.orientation;
