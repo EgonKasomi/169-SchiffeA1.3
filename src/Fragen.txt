@@ -1,0 +1,64 @@
+Fragen zum Aufgabenblatt 01
+
+
+zu Aufgabe 1:
+1) Warum muss bei der Methode hit() sichergestellt werden, dass das Schiff nicht bereits gesunken ist?
+
+		A: andernfalls würde das wiederholte klicken auf bereits getroffene Tiles immer wieder Punkte generieren 
+
+
+zu Aufgabe 2:
+1) Testen Sie die Konsolenausgabe der nicht transponierten Matrix und überlegen Sie sich, warum dies so geschieht.
+
+	A: Die Marrix iteriert über Zeilen und nicht die Spalten wodurch die Konsolenausgabe verkehrt herum aussieht
+
+
+zu Aufgabe 3:
+1) Informieren Sie sich über enums und wie sie eingesetzt werden. Wie sieht ihre Struktur (Syntax) aus?
+
+	A: enums erlaubt das setzen vordefinierter Konstanten, sie werden nur in GROSSBUCHSTABEN geschrieben
+
+2) Beschreiben Sie, was die Methode bombard() im Detail macht.
+
+	A: Sie switch den momentanen Status des gewählten FieldTiles und geht alles möglichen cases durch um zu prüfen was sich auf 
+		disem Tile befindet. Sie returnt false in allen cases ausser ship, in diesem case trägt sie einen hit beim corresponding ship ein
+
+3) Welchen Status haben die FieldTiles(Kästchen) und die Schiffsliste nach dem Erzeugen eines Spielfeldes?
+
+	A: FieldTiles haben den Status water und die Schiffsliste ist leer
+
+4) Was wird in der Methode getTileAt() getestet, damit das Programm nicht einfach abstürzt?
+
+	A: ob die ausgewählen Koordinaten auch ein dazugehöriges FieldTile haben, wenn nicht, dann wird eine Runtime exception ausgegeben
+
+
+zu Aufgabe 4:
+1) Wie groß ist der Wert von tileSize? Woher bekommen Sie diese Information?
+
+	A: aus dem Konstanten packet welches die genaue grösse eine Tiles konstant defieniert
+
+2) Mit welchem Code können Sie in der Klasse GameFieldRenderer die Anzahl Spalten und Zeilen des Spielfeldes ermitteln?
+
+	A: mit einer for schleife welche die width und height in tileSize grosse increments aufteilt
+
+3) Woraus geht hervor, an welcher Stelle das Spielfeld gezeichnet werden soll?
+
+	A: von den eingabe parametern x und y 
+
+Als Hilfe zum Rasterzeichnen legen Sie sich bitte eine Skizze zum Spielfeld an und tragen die zugehörigen Werte ein.
+
+
+
+zu Aufgabe 5:
+1) Wo verwenden Sie Zeilenkommentare, wo Javadoc-Kommentare?
+
+	A: Javadoc-Kommentare vor Klassen, fields, constructors und Methoden, Zeilenkommentare innerhalb methoden für das eigene Verständnis
+
+2) Was sollen Javadoc-Kommentare aussagen?
+
+	A: Javadoc-Kommentare sollen genaue Informationen über Klassen, fields, constructors und Methoden geben welche dann 
+		von überall aus ohne die Klasse öffnen zu müssen gelesen werden können 
+
+3) Welche Annotationen müssen Sie im Javadoc-Kommentar vor einer Methode berücksichtigen?
+
+	A: Mit einem Verb anfangen 

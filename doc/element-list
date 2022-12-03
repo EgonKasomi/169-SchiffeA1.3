@@ -1,0 +1,9 @@
+module:schiffeversenken
+de.uniluebeck.itm.schiffeversenken.engine
+de.uniluebeck.itm.schiffeversenken.engine.uicomponents
+de.uniluebeck.itm.schiffeversenken.engine.utilityscenes
+de.uniluebeck.itm.schiffeversenken.game
+de.uniluebeck.itm.schiffeversenken.game.ai
+de.uniluebeck.itm.schiffeversenken.game.menues
+de.uniluebeck.itm.schiffeversenken.game.model
+de.uniluebeck.itm.schiffeversenken.main
