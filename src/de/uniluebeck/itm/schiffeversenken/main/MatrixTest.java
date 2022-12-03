@@ -11,6 +11,7 @@ public class MatrixTest {
 	 * @param columns amount of columns the matrix gets
 	 * @param rows amount of rows the matrix gets
 	 * @param field the initialized matrix with the predetermined amount of columns and rows 
+	 * MEIN PENIS IST SEHR KLEIN :(
 	 */
 	int columns = 10;
 	
