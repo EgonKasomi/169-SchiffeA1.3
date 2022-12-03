@@ -34,7 +34,7 @@ public class MatrixTest {
 		System.out.println();
 
 		
-		test.firstRowToVariable();
+		test.firstRowToVariables();
 		test.printer();
 		
 		System.out.println();
@@ -114,7 +114,7 @@ public class MatrixTest {
 	 * firstRowToVariable use this method to set the first row to a desired variable
 	 * @param k variable the first to rows get set to 
 	 */
-	public void firstRowToVariable(){
+	public void firstRowToVariables(){
 		
 		int k = 69;
 		

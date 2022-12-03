@@ -71,7 +71,7 @@ public class LoadingScene extends Scene {
 			@Override
 			public void run() {
 				for (int x=0;x<tiles.length; x++) {
-					
+					//final int x = 0;
 				}
 				
 				
