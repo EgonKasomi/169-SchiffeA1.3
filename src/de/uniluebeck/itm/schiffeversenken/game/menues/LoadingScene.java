@@ -70,20 +70,11 @@ public class LoadingScene extends Scene {
 		this.c.dispatchWork(new Runnable() {
 			@Override
 			public void run() {
-				for (int x=0;x<tiles.length; x++) {
-					//final int x = 0;
+				for (int x=0; x<tiles.length; x++) {
+					AssetRegistry.registerTile(tiles[x][0], Application.loadTile(tiles[x][1]));
 				}
-				
-				
-				//AssetRegistry.registerTile(tiles[0][0], Application.loadTile(tiles[0][1]));
 			}
-		});
-		this.c.dispatchWork(new Runnable() {
-			@Override
-			public void run() {
-				AssetRegistry.registerTile(tiles[1][0], Application.loadTile(tiles[1][1]));
-			}
-		});
+		 });
 		this.c.dispatchWork(new Runnable() {
 			@Override
 			public void run() {

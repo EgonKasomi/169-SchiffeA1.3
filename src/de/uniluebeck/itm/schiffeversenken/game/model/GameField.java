@@ -36,7 +36,6 @@ public final class GameField {
 	 * @param size The size of the new game field to use.
 	 */
 	public GameField(Vec2 size) {
-		//this initializes the matrix
 		this.size = size;
 		this.field = new FieldTile[size.getX()][size.getY()];
 		
