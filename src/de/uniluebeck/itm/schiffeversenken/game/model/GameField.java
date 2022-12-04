@@ -76,6 +76,22 @@ public final class GameField {
 	 * @param shipToPlace The ship instance to place
 	 */
 	public void placeShip(int posX, int posY, int length, boolean up, Ship shipToPlace) {
+		
+		//getTileAt(posX, posY).setTilestate(FieldTileState.STATE_SHIP);
+		
+		if (up){
+			for (int x=0; x<length; x++){
+				getTileAt(posX, posY + x).setTilestate(FieldTileState.STATE_SHIP);
+				getTileAt(posX, posY + x).setCorrespondingShip(shipToPlace);
+			}
+		}
+		else {
+			for (int y=0; y<length; y++){
+				getTileAt(posX + y, posY).setTilestate(FieldTileState.STATE_SHIP);
+				getTileAt(posX + y, posY).setCorrespondingShip(shipToPlace);
+			}
+		}
+			
 		/*
 		 * Nach korrekter Implementation sollten sich die Schiffe korrekt vertikal 
 		 * und horizontal mit der richtigen Laenge platzieren lassen. Sie werden aber 

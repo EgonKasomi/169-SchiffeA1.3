@@ -129,8 +129,82 @@ public class GameFieldRenderer {
      * @return The composed ships tile
      */
     private Tile lookupShipTile(int x, int y, boolean alreadyHit) {
-        return AssetRegistry.getTile("up.ship.middle");
+        Ship ship = field.getTileAt(x, y).getCorrespondingShip();
+        
+        boolean top = false;
+        boolean bottom = false;
+        boolean right = false;
+        boolean left = false;
+
+
+        if (y != 0) {
+            if (ship == field.getTileAt(x, y - 1).getCorrespondingShip()){
+                top = true;
+            } 
+        }
+        if (y != this.field.getSize().getY()){
+            if (ship == field.getTileAt(x, y + 1).getCorrespondingShip()){
+                bottom = true;
+            }
+        }
+        if (x != this.field.getSize().getX()){    
+            if (ship == field.getTileAt(x + 1, y).getCorrespondingShip()){
+                right = true;
+            }
+        }
+        if (x != 0){    
+            if (ship == field.getTileAt(x - 1, y).getCorrespondingShip()){
+                left = true;
+            }   
+        }
+        if (!alreadyHit){
+            if (top & bottom){
+                return AssetRegistry.getTile("up.ship.middle");
+            }
+            else if (top){
+                return AssetRegistry.getTile("up.ship.aft");
+            }
+            else if (bottom){
+                return AssetRegistry.getTile("up.ship.bug");
+            }
+            else if (right & left){
+                return AssetRegistry.getTile("right.ship.middle");
+            }
+            else if (right){
+                return AssetRegistry.getTile("right.ship.aft");
+            }
+            else if (left){
+                return AssetRegistry.getTile("right.ship.bug");
+            }
+            else{
+                return AssetRegistry.getTile("up.ship.single");
+            }
+        }
+        else {
+            if (top & bottom){
+                return AssetRegistry.getTile("up.ship.middle.hit");
+            }
+            else if (top){
+                return AssetRegistry.getTile("up.ship.aft.hit");
+            }
+            else if (bottom){
+                return AssetRegistry.getTile("up.ship.bug.hit");
+            }
+            else if (right & left){
+                return AssetRegistry.getTile("right.ship.middle.hit");
+            }
+            else if (right){
+                return AssetRegistry.getTile("right.ship.aft.hit");
+            }
+            else if (left){
+                return AssetRegistry.getTile("right.ship.bug.hit");
+            }
+            else{
+                return AssetRegistry.getTile("up.ship.single.hit");
+            }
+        }    
     }
+
 
     
     /**

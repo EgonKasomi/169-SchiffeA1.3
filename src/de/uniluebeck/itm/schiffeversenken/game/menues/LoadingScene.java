@@ -65,8 +65,7 @@ public class LoadingScene extends Scene {
 				{"right.ship.single", "assets/32x32/Tile_singleship_right_32x32_uint8_rgba.png"},
 				{"right.ship.single.hit", "assets/32x32/Tile_singleship_right_hit_32x32_uint8_rgba.png"},
 				{"arrow.down", "assets/32x32/Tile_arrow_down_32x32_uint8_rgba.png"}};
-				
-		//final int x=0;		
+						
 		this.c.dispatchWork(new Runnable() {
 			@Override
 			public void run() {
@@ -79,6 +78,13 @@ public class LoadingScene extends Scene {
 			@Override
 			public void run() {
 				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/0_small.png"));
+				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/1_small.png"));
+				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/2_small.png"));
+				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/3_small.png"));
+				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/4_small.png"));
+				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/5_small.png"));
+				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/6_small.png"));
+				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/7_small.png"));
 			}
 		});
 
