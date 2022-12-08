@@ -9,14 +9,18 @@ package de.uniluebeck.itm.schiffeversenken.game.model;
 public class Ship {
 	
 	/**
-	 * @param length The length of the ship
-	 * @param orientation The orientation of the ship: true for vertical, false for horizontal
-	 * @param hits The amount of this the ship has currently taken 
+	 * length The length of the ship
 	 */
 	private int length;
 	
+	/**
+	 * orientation The orientation of the ship: true for vertical, false for horizontal
+	 */
 	private boolean orientation;
 	
+	/**
+	 * hits The amount of this the ship has currently taken 
+	 */
 	private int hits = 0;
 
 	/**
