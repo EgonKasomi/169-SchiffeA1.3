@@ -8,15 +8,19 @@ package de.uniluebeck.itm.schiffeversenken.main;
 public class MatrixTest {
 	
 	/**
-	 * @param columns amount of columns the matrix gets
-	 * @param rows amount of rows the matrix gets
-	 * @param field the initialized matrix with the predetermined amount of columns and rows 
+	 * amount of columns the matrix gets
 	 */
-	int columns = 10;
+	private final int columns = 10;
 	
-	int rows = 8;
-	
-	int[][] field = new int[columns][rows];
+	/**
+	 * amount of rows the matrix gets
+ 	*/
+	private final int rows = 8;
+
+	/**
+	 * the initialized matrix with the predetermined amount of columns and rows
+	 */
+	private final int[][] field = new int[columns][rows];
 	
 	/**
 	 * main method use this method to use other methods and construct a matrix
@@ -28,28 +32,25 @@ public class MatrixTest {
 		test.iniNormal();
 		test.printer();
 		
-		test.columnSums();
+		test.columnSums(5);
 		
 		System.out.println();
 		System.out.println();
 
 		
-		test.firstRowToVariables();
+		test.firstRowToVariables(5);
 		test.printer();
 		
 		System.out.println();
 		
-		test.iniWithVariable();
+		test.iniWithVariable(5);
 		test.printer();
 	}
 	/**
 	 * iniNormal use this method to initialize the matrix normally
-	 * @param  z temporary variable that ups each loop to populate the matrix
 	 */
 	public void iniNormal() {
-		
  		int z = 0;
-	 	
 		for (int x = 0; x < columns; x++) {
 			for (int y = 0; y < rows; y++) {
 				field[x][y] = z;
@@ -79,10 +80,7 @@ public class MatrixTest {
 	 * iniWithVariable use this method to initialize the matrix with a variable on the main diagonal
 	 * @param k variable to which the main diagonal gets set to
 	 */
-	public void iniWithVariable(){
-		
-		int k = 69;
-		
+	public void iniWithVariable(int k){
 		for (int x = 0; x < columns; x++) {
 			for (int y = 0; y < rows; y++) {
 				if ( x == y) {
@@ -96,11 +94,8 @@ public class MatrixTest {
 	 * columnSums used this method to calculate and print out the sum of each column
 	 * @param m temporary variable used to save the sum of each column 
 	 */
-	public void columnSums(){
-  		System.out.println("---------------------------------");
-		
-		int m = 0;
-		
+	public void columnSums(int m){
+		System.out.println("---------------------------------");
 		for (int x = 0; x < columns; x++) {
 			for (int y = 0; y < rows; y++) {
 				m += field[x][y];
@@ -114,10 +109,7 @@ public class MatrixTest {
 	 * firstRowToVariable use this method to set the first row to a desired variable
 	 * @param k variable the first to rows get set to 
 	 */
-	public void firstRowToVariables(){
-		
-		int k = 69;
-		
+	public void firstRowToVariables(int k){
 		for (int x = 0; x < columns; x++) {
 			for (int y = 0; y < rows; y++) {
 				if ( y == 0) {

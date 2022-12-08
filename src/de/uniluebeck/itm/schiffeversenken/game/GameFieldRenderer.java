@@ -129,25 +129,28 @@ public class GameFieldRenderer {
      * @return The composed ships tile
      */
     private Tile lookupShipTile(int x, int y, boolean alreadyHit) {
+
+        //initializes a new variable ship with the ship we are currently looking at
         Ship ship = field.getTileAt(x, y).getCorrespondingShip();
-        
+
+        //initializes 4 variables we use to check wether another ship is positioned around the current one
         boolean top = false;
         boolean bottom = false;
         boolean right = false;
         boolean left = false;
 
-
+        //1. if-clause checks for OUT_OF_BOUNDS exceptions, 2. if-clause checks for parts of the same ship
         if (y != 0) {
             if (ship == field.getTileAt(x, y - 1).getCorrespondingShip()){
                 top = true;
             } 
         }
-        if (y != this.field.getSize().getY()){
+        if (y != this.field.getSize().getY() - 1){
             if (ship == field.getTileAt(x, y + 1).getCorrespondingShip()){
                 bottom = true;
             }
         }
-        if (x != this.field.getSize().getX()){    
+        if (x != this.field.getSize().getX() - 1){    
             if (ship == field.getTileAt(x + 1, y).getCorrespondingShip()){
                 right = true;
             }
@@ -157,6 +160,8 @@ public class GameFieldRenderer {
                 left = true;
             }   
         }
+
+        //1. if-clause checks wether the ship has already been hit or not, 2. if-clause checks which asset to return
         if (!alreadyHit){
             if (top & bottom){
                 return AssetRegistry.getTile("up.ship.middle");
@@ -176,8 +181,12 @@ public class GameFieldRenderer {
             else if (left){
                 return AssetRegistry.getTile("right.ship.bug");
             }
-            else{
+            //this if-clause for some reason crashes the whole application, help
+            /*else if(ship.isVertical()){
                 return AssetRegistry.getTile("up.ship.single");
+            }*/
+            else{
+                return AssetRegistry.getTile("right.ship.single");
             }
         }
         else {
