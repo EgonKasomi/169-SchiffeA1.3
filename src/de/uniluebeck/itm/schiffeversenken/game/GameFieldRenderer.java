@@ -181,10 +181,9 @@ public class GameFieldRenderer {
             else if (left){
                 return AssetRegistry.getTile("right.ship.bug");
             }
-            //this if-clause for some reason crashes the whole application, help
-            /*else if(ship.isVertical()){
+            else if(ship.isVertical()){
                 return AssetRegistry.getTile("up.ship.single");
-            }*/
+            }
             else{
                 return AssetRegistry.getTile("right.ship.single");
             }
@@ -208,8 +207,11 @@ public class GameFieldRenderer {
             else if (left){
                 return AssetRegistry.getTile("right.ship.bug.hit");
             }
-            else{
+            else if(ship.isVertical()){
                 return AssetRegistry.getTile("up.ship.single.hit");
+            }
+            else{
+                return AssetRegistry.getTile("right.ship.single.hit");
             }
         }    
     }

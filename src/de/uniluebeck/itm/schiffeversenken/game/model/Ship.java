@@ -27,14 +27,13 @@ public class Ship {
 	 * This constructor constructs a new ship.
 	 * @param length The length of the ship to create.
 	 * @param orientation The orientation of the ship: true for vertical, false for horizontal
-	 * @param hits The amount of hits the ship has currently taken
 	 */
 	public Ship(int length, boolean orientation) {
 		
 		//these are the new params for the constructor
-		length = this.length;
+		this.length = length;
 
-		orientation = this.orientation;
+		this.orientation = orientation;
 	}
 	/**
 	 * Use this method in order to mark another hit.
@@ -60,8 +59,9 @@ public class Ship {
 		}
 	}
 	
-	/*
+	/**
 	 * Use this method as a getter for the orientation 
+	 * @return orientation of the ship
 	 */
 	public boolean isVertical() {
 		return orientation;
