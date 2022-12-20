@@ -8,7 +8,7 @@ import de.uniluebeck.itm.schiffeversenken.game.model.GameModel;
 /**
  * This class provides graphical output for the game
  * 
- * @author leondietrich
+ * @author leondietrich modified by B.Voss & F.Junghans
  *
  */
 public class GameView extends View<GameModel> {
@@ -30,7 +30,8 @@ public class GameView extends View<GameModel> {
 	public GameView(GameModel m) {
         super(m);
         this.fieldRenderer = new GameFieldRenderer(this.getModelInstance().getHumanPlayerField());
-        this.opponentFieldRenderer = new GameFieldRenderer(this.getModelInstance().getComputerPlayerField());
+        //this.opponentFieldRenderer = new GameFieldRenderer(this.getModelInstance().getComputerPlayerField());
+        this.opponentFieldRenderer = new HitMissRenderer(this.getModelInstance().getComputerPlayerField());
     }
 
     @Override

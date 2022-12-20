@@ -1,6 +1,8 @@
 package de.uniluebeck.itm.schiffeversenken.main;
 
 /**
+ *  this class creates a test matrix 
+ * 
  * @author	Bendix Voss
  * @author	Fabio Junghans
  * Group	169

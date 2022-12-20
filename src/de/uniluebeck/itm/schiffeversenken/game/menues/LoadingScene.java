@@ -6,7 +6,7 @@ import de.uniluebeck.itm.schiffeversenken.engine.*;
  * This scene displays a loading screen while doing shady loading business.
  * After being done doing so it switches to the main menu scene.
  * 
- * @author leondietrich
+ * @author leondietrich modified by B. Voss, F. Junghans
  *
  */
 public class LoadingScene extends Scene {
@@ -65,39 +65,30 @@ public class LoadingScene extends Scene {
 				{"right.ship.single", "assets/32x32/Tile_singleship_right_32x32_uint8_rgba.png"},
 				{"right.ship.single.hit", "assets/32x32/Tile_singleship_right_hit_32x32_uint8_rgba.png"},
 				{"arrow.down", "assets/32x32/Tile_arrow_down_32x32_uint8_rgba.png"}};
-						
+	
+	//loads the right assets to the right tile
+	for (int y=0; y<tiles.length; y++){	
+		final int x=y;
+		this.c.dispatchWork(new Runnable() {
+			@Override
+			public void run() { 
+					AssetRegistry.registerTile(tiles[x][0], Application.loadTile(tiles[x][1]));	
+			}
+		 });}
+
+	//loads the seven segment assets
+	for (int x=0; x<10; x++){
+		String a = String.valueOf(x);
 		this.c.dispatchWork(new Runnable() {
 			@Override
 			public void run() {
-				for (int x=0; x<tiles.length; x++) {
-					AssetRegistry.registerTile(tiles[x][0], Application.loadTile(tiles[x][1]));
-				}
+				AssetRegistry.registerTile("7seg." + a, Application.loadTile("assets/7seg/" + a + "_small.png"));
 			}
-		 });
-		this.c.dispatchWork(new Runnable() {
-			@Override
-			public void run() {
-				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/0_small.png"));
-				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/1_small.png"));
-				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/2_small.png"));
-				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/3_small.png"));
-				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/4_small.png"));
-				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/5_small.png"));
-				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/6_small.png"));
-				AssetRegistry.registerTile("7seg.0", Application.loadTile("assets/7seg/7_small.png"));
-			}
-		});
+		});}
 
 		this.c.startWorkStack();
 	}
 
-	/*
-	 * Nach Bearbeitung der Aufgabe 2.1:
-	 * Beim Versuch, ein Schiff zu platzieren, wird jetzt an der Maus angeheftet das Schiff angezeigt.
-	 * 
-	 * 
-	 */
-	
 	@Override
 	public void update(long milis) {
 		if (!this.c.hasWork()) {

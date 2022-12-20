@@ -111,4 +111,12 @@ public final class GameField {
 		return this.ships.toArray(arr);
 	}
 
+	/**
+	 * Use this method as a getter for the shipList
+	 * 
+	 * @return the current shipList
+	 */
+	public List<Ship> getShips(){
+		return this.ships;
+	}
 }
