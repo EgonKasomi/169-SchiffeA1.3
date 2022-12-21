@@ -161,59 +161,18 @@ public class GameFieldRenderer {
             }   
         }
 
-        //1. if-clause checks wether the ship has already been hit or not, 2. if-clause checks which asset to return
-        if (!alreadyHit){
-            if (top & bottom){
-                return AssetRegistry.getTile("up.ship.middle");
-            }
-            else if (top){
-                return AssetRegistry.getTile("up.ship.aft");
-            }
-            else if (bottom){
-                return AssetRegistry.getTile("up.ship.bug");
-            }
-            else if (right & left){
-                return AssetRegistry.getTile("right.ship.middle");
-            }
-            else if (right){
-                return AssetRegistry.getTile("right.ship.aft");
-            }
-            else if (left){
-                return AssetRegistry.getTile("right.ship.bug");
-            }
-            else if(ship.isVertical()){
-                return AssetRegistry.getTile("up.ship.single");
-            }
-            else{
-                return AssetRegistry.getTile("right.ship.single");
-            }
-        }
-        else {
-            if (top & bottom){
-                return AssetRegistry.getTile("up.ship.middle.hit");
-            }
-            else if (top){
-                return AssetRegistry.getTile("up.ship.aft.hit");
-            }
-            else if (bottom){
-                return AssetRegistry.getTile("up.ship.bug.hit");
-            }
-            else if (right & left){
-                return AssetRegistry.getTile("right.ship.middle.hit");
-            }
-            else if (right){
-                return AssetRegistry.getTile("right.ship.aft.hit");
-            }
-            else if (left){
-                return AssetRegistry.getTile("right.ship.bug.hit");
-            }
-            else if(ship.isVertical()){
-                return AssetRegistry.getTile("up.ship.single.hit");
-            }
-            else{
-                return AssetRegistry.getTile("right.ship.single.hit");
-            }
-        }    
+        String key = "";
+        //first check the ships orientation
+        key += (ship.isVertical())                      ?"up.ship" :"right.ship"; 
+        //then check the ship part
+        key += (!top && !bottom) && (!right && !left)   ?".single" :"";
+        key += (!top &&  bottom) || (!right &&  left)   ?".bug" :"";
+        key += ( top &&  bottom) || ( right &&  left)   ?".middle" :"";
+        key += ( top && !bottom) || ( right && !left)   ?".aft" :"";
+        //lastly check if the ship has already been hit
+        key += (alreadyHit)                             ?".hit" :"";
+        //now return our frankenstein variable
+        return AssetRegistry.getTile(key);
     }
 
 

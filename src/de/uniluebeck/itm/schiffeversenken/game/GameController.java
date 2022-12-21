@@ -104,10 +104,10 @@ public class GameController extends Controller<GameModel> {
             (Ship) -> {if (Ship.isSunken())
                 {i.getAndAdd(1);}
             });
-        if (field.getShips().size() == i.get()){
+        if (field.getCopyOfShipListAsArray().length == i.get()){
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
