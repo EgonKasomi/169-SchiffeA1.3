@@ -43,42 +43,65 @@ public class GameController extends Controller<GameModel> {
         //Then we calculate where exactly the player clicked 
             final int tileX = positionOnOpponentsField.getX()/res;
             final int tileY = positionOnOpponentsField.getY()/res;
-            Application.log("Bombarding position " + tileX + ", " + tileY);
             final FieldTile fieldTile = model.getComputerPlayerField().getTileAt(tileX, tileY);
+        //now we check if the tile has already been hit    
             if (!fieldTile.wasAlreadyBombarded()) {
-                if(fieldTile.bombard()) {
-                	model.addPlayerPoints(Constants.POINTS_FOR_HIT);
-                	final Ship s = fieldTile.getCorrespondingShip();
-                    if (s.isSunken()){
-                        model.addPlayerPoints(Constants.POINTS_FOR_SHIP_SUNK);
-                        handlePossibleGameEnd();
-                    }
-                } else {
-                    //Change turns to the ai
-                    model.setRoundChangingFlag(true);
-                    this.dispatchWork(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            while (model.getAgent().performMove(model.getHumanPlayerField())) {
-                                rewardAgentForDestroyingPlayer();
-                            }
-                        }
-
-                        private void rewardAgentForDestroyingPlayer() {
-                            model.addAiPoints(Constants.POINTS_FOR_HIT);
-                            final Ship s = model.getAgent().getLastAttackedTile().getCorrespondingShip();
-                            if(s != null && s.isSunken()) {
-                            	model.addAiPoints(Constants.POINTS_FOR_SHIP_SUNK);
-                                handlePossibleGameEnd();
-                            }
-                        }
-
-                    });
-                    this.startWorkStack();
-                }
+                startTheBombardment(fieldTile, model);
             }
         }
+    }
+
+    /**
+     * Use this method to start the bombardment process, beginning with the player and then changing to the ai
+     * 
+     * @param fieldTile
+     * @param model
+     */
+    public void startTheBombardment(FieldTile fieldTile, GameModel model){
+        //first check if the player hit a ship
+        if(fieldTile.bombard()) {
+            model.addPlayerPoints(Constants.POINTS_FOR_HIT);
+            final Ship s = fieldTile.getCorrespondingShip();
+        //now check if said ship has been sunken and wether the game is over
+            if (s.isSunken()){
+                model.addPlayerPoints(Constants.POINTS_FOR_SHIP_SUNK);
+                handlePossibleGameEnd();
+            }
+        }
+        //if the player did'nt hit a ship change to the ai's turn
+        else {
+            model.setRoundChangingFlag(true);
+            aiBombardment(fieldTile, model);
+        }
+    }
+
+    /**
+     * Use this method to activate the ai bombarding protocol which bombards the players field
+     * 
+     * @param fieldTile
+     * @param model
+     */
+    public void aiBombardment(FieldTile fieldTile, GameModel model){
+        this.dispatchWork(new Runnable() {
+
+            @Override
+            public void run() {
+                while (model.getAgent().performMove(model.getHumanPlayerField())) {
+                    rewardAgentForDestroyingPlayer();
+                }
+            }
+
+            private void rewardAgentForDestroyingPlayer() {
+                model.addAiPoints(Constants.POINTS_FOR_HIT);
+                final Ship s = model.getAgent().getLastAttackedTile().getCorrespondingShip();
+                if(s != null && s.isSunken()) {
+                    model.addAiPoints(Constants.POINTS_FOR_SHIP_SUNK);
+                    handlePossibleGameEnd();
+                }
+            }
+
+        });
+        this.startWorkStack();
     }
 
     /**
@@ -95,15 +118,18 @@ public class GameController extends Controller<GameModel> {
 
     /**
      * This method checks if all ships of either player are sunken
+     * @param field the GameField on which to check 
      * 
      * @return true if all the ships of either player are sunken
      */
     private boolean areShipsSunken(GameField field){
         final AtomicInteger i = new AtomicInteger(0);
+        //iterate over the ShipList and count up i for each sunken ship
         field.iterateOverShips( 
             (Ship) -> {if (Ship.isSunken())
                 {i.getAndAdd(1);}
             });
+        //compare the counters value with the total amount of ships in the list
         if (field.getCopyOfShipListAsArray().length == i.get()){
             return true;
         }

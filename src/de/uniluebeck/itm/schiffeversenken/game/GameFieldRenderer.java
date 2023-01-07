@@ -53,49 +53,34 @@ public class GameFieldRenderer {
         final int width = tileSize * this.field.getSize().getX();
         final int height = tileSize * this.field.getSize().getY();
 
-        /*
-         * upperLeft The upper left corner of the field
-         * upperRight The upper right corner of the field
-         * bottomLeft The bottom left corner of the field 
-         * bottomRight The bottom right corner of the field
-         */
         Vec2 upperLeft = new Vec2(x,y);
         Vec2 upperRight = new Vec2(x + width,y);
         Vec2 bottomLeft = new Vec2(x, y + height);
         Vec2 bottomRight = new Vec2(x + width, y + height);
+       
         //draw the white lines around the border of the field
         c.setColor(1, 1, 1);
         c.drawLine(upperLeft, upperRight);
         c.drawLine(upperLeft, bottomLeft);
         c.drawLine(bottomLeft, bottomRight);
         c.drawLine(bottomRight, upperRight);
-        
-        /*
-         * temp1 The position on top of the field from where to draw the black line
-         * temp2 The position on the bottom of the field to where the black line is drawn
-         */
+
         //draw the black vertical lines between each tile
         c.setColor(0, 0, 0);
+
         //the variable i counts up in increments of tileSize to make it modular for different sized fields
         for (int i=tileSize; i < width; i += tileSize) {
         	Vec2 temp1 = new Vec2(x + i, y);
         	Vec2 temp2 = new Vec2(x + i, y + height);
         	c.drawLine(temp1, temp2);
         }
-        
-        /*
-         * temp3 The position on the left of the field from where to draw the black line
-         * temp4 The position on the right of the field to where the black line is drawn
-         * draw the black horizontal lines between each tile
-         */
-        // @param j counts up in increments of tileSize to make it modular for different sized fields
+  
+        //j counts up in increments of tileSize to make it modular for different sized fields
         for (int j=tileSize; j < height; j += tileSize) {
         	Vec2 temp3 = new Vec2(x, y + j);
         	Vec2 temp4 = new Vec2(x + width, y + j);
         	c.drawLine(temp3, temp4);
         }
-        
-        
     }
 
     /**

@@ -10,7 +10,7 @@ import de.uniluebeck.itm.schiffeversenken.game.model.FieldTile.FieldTileState;
  * This class represents a players field. There are at least two instances of
  * this class in a game.
  * 
- * @author leondietrich, modified by I. Schumacher, modified by B. Voss, modified by F. Junghans
+ * @author leondietrich, modified by I. Schumacher, B. Voss, F. Junghans
  * 
  */
 public final class GameField {

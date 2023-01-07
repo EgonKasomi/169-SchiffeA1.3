@@ -8,7 +8,7 @@ import de.uniluebeck.itm.schiffeversenken.game.model.*;
  * 
  * @author Bendix Voss, Fabio Junghans
  * 
- * Gruppe 169
+ * Group 169
  */
 public class HitMissRenderer extends GameFieldRenderer{
 
@@ -85,16 +85,16 @@ public class HitMissRenderer extends GameFieldRenderer{
         }
 
         String key = "";
-
+        //first check the ships orientation
         key += (ship.isVertical())                      ?"up.ship" :"right.ship"; 
-
+        //then check the ship part
         key += (!top && !bottom) && (!right && !left)   ?".single" :"";
         key += (!top &&  bottom) || (!right &&  left)   ?".bug" :"";
         key += ( top &&  bottom) || ( right &&  left)   ?".middle" :"";
         key += ( top && !bottom) || ( right && !left)   ?".aft" :"";
-
+        //lastly check if the ship has already been hit
         key += (alreadyHit)                             ?".hit" :"";
-
+        //now return our frankenstein variable
         return AssetRegistry.getTile(key);
     }
 }

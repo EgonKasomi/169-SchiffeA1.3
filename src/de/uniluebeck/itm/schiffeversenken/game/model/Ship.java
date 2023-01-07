@@ -3,8 +3,8 @@ package de.uniluebeck.itm.schiffeversenken.game.model;
 /**
  * This class represents a ship.
  * @author leondietrich, modified by I. Schumacher, 
- * modified by B. Voss, modified by F. Junghans
- * Group   169	
+ *  B. Voss, F. Junghans
+ * 
  */
 public class Ship {
 	
