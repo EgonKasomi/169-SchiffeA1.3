@@ -1,7 +1,6 @@
 package de.uniluebeck.itm.schiffeversenken.game;
 import de.uniluebeck.itm.schiffeversenken.game.model.GameField;
 import de.uniluebeck.itm.schiffeversenken.engine.*;
-import de.uniluebeck.itm.schiffeversenken.game.model.*;
 
 /**
  * This class renders the opponents GameField
@@ -53,48 +52,6 @@ public class HitMissRenderer extends GameFieldRenderer{
      */
     private Tile lookupShipTile(int x, int y, boolean alreadyHit) {
 
-        //initializes a new variable ship with the ship we are currently looking at
-        Ship ship = getField().getTileAt(x, y).getCorrespondingShip();
-
-        //initializes 4 variables we use to check wether another ship is positioned around the current one
-        boolean top = false;
-        boolean bottom = false;
-        boolean right = false;
-        boolean left = false;
-
-        //1. if-clause checks for OUT_OF_BOUNDS exceptions, 2. if-clause checks for parts of the same ship
-        if (y != 0) {
-            if (ship == getField().getTileAt(x, y - 1).getCorrespondingShip()){
-                top = true;
-            } 
-        }
-        if (y != this.getField().getSize().getY() - 1){
-            if (ship == getField().getTileAt(x, y + 1).getCorrespondingShip()){
-                bottom = true;
-            }
-        }
-        if (x != this.getField().getSize().getX() - 1){    
-            if (ship == getField().getTileAt(x + 1, y).getCorrespondingShip()){
-                right = true;
-            }
-        }
-        if (x != 0){    
-            if (ship == getField().getTileAt(x - 1, y).getCorrespondingShip()){
-                left = true;
-            }   
-        }
-
-        String key = "";
-        //first check the ships orientation
-        key += (ship.isVertical())                      ?"up.ship" :"right.ship"; 
-        //then check the ship part
-        key += (!top && !bottom) && (!right && !left)   ?".single" :"";
-        key += (!top &&  bottom) || (!right &&  left)   ?".bug" :"";
-        key += ( top &&  bottom) || ( right &&  left)   ?".middle" :"";
-        key += ( top && !bottom) || ( right && !left)   ?".aft" :"";
-        //lastly check if the ship has already been hit
-        key += (alreadyHit)                             ?".hit" :"";
-        //now return our frankenstein variable
-        return AssetRegistry.getTile(key);
+        return AssetRegistry.getTile("water.hiddenshiphit");
     }
 }

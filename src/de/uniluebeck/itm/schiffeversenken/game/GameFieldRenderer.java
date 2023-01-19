@@ -2,7 +2,7 @@ package de.uniluebeck.itm.schiffeversenken.game;
 
 import de.uniluebeck.itm.schiffeversenken.engine.*;
 import de.uniluebeck.itm.schiffeversenken.game.model.*;
-
+import java.util.Random;
 /**
  * Game field rendering methods.
  *
@@ -160,8 +160,6 @@ public class GameFieldRenderer {
         return AssetRegistry.getTile(key);
     }
 
-
-    
     /**
      * The purpose of this method is to enable the usage of the game field on expanding classes.
      * @return The game field
@@ -170,4 +168,46 @@ public class GameFieldRenderer {
         return this.field;
     }
 
+    /**
+     * Use this method to render the tile the mouse currently hovers over in a different color
+     * 
+     * @param c the current Canvas
+     * @param x the x coordinate of the mouse
+     * @param y the y coordinate of the mouse
+     * @param fieldX the x dimension of the opponents field
+     * @param fieldY the y dimension of the opponents field
+     */
+    public void renderMouseOver(Canvas c, int x, int y, int fieldX, int fieldY){
+        int tileSize = Constants.TILE_SIZE;
+        int width  = field.getSize().getX()*tileSize;
+        int height = field.getSize().getY()*tileSize;
+        //check if the mouse position is within the opponents field
+        if (!((x >= width) && (y >=  35) 
+            && (x < fieldX + width) && (y < height + 30))){
+            return;
+        }
+        
+        //calculates which tile the mouse is hovering over
+        final int tileX = (x - fieldX)/tileSize;
+        final int tileY =  y/tileSize;
+        
+        //calculates the upper left hand corner of the current tile
+        final Vec2 tilePosition = new Vec2(tileX*tileSize, tileY*tileSize);
+        
+        //sets the color and fills in the designated tile with a semitransparent color
+        c.setColor(0.8,0.8,0.8, 0.3);
+        c.fillRect(tilePosition.getX() + fieldX + 1, tilePosition.getY() + 4, tileSize - 1, tileSize - 1);
+        
+        //modifies the coordinates to make the arrow hover over the top right corner of the current tile
+        final Vec2 tilePositionArrow2 = new Vec2((tileX*tileSize + fieldX ) + (tileSize/2), (tileY*tileSize) + (tileSize/2) * (-1));
+        
+        //calculates a small repeating number by using modulo on a very large number that is generated with the current time
+        final int animationOffsetter = ((int)System.currentTimeMillis()/250)*2;
+        final int animationOffset = (int) (animationOffsetter % 10);
+        Vec2 animationOffsetTheVector = new Vec2(animationOffset * (-1), animationOffset);
+        
+        //selects the arrow asset and renders at the previously specified location
+        //(with the animationOffset variables it should look like its floating)
+        AssetRegistry.getTile("arrow.down").renderAt(c, tilePositionArrow2.add(animationOffsetTheVector));
+    }
 }

@@ -4,6 +4,7 @@ import de.uniluebeck.itm.schiffeversenken.engine.Canvas;
 import de.uniluebeck.itm.schiffeversenken.engine.Vec2;
 import de.uniluebeck.itm.schiffeversenken.engine.View;
 import de.uniluebeck.itm.schiffeversenken.game.model.GameModel;
+import de.uniluebeck.itm.schiffeversenken.engine.*;
 
 /**
  * This class provides graphical output for the game
@@ -43,13 +44,15 @@ public class GameView extends View<GameModel> {
         final Vec2 gameFieldDimensions = model.getHumanPlayerField().getSize(); 
 
         final int fieldsWidth = gameFieldDimensions.getX() * Constants.TILE_SIZE;
-        final int fieldsHeight = gameFieldDimensions.getX() * Constants.TILE_SIZE;
+        final int fieldsHeight = gameFieldDimensions.getY() * Constants.TILE_SIZE;
         final int opponentsFieldX = offsetX + fieldsWidth + 10;
+        final int opponentsFieldY = offsetY + fieldsHeight + 35;
         this.fieldRenderer.renderGameField(c, offsetX, offsetY);
         this.opponentFieldRenderer.renderGameField(c, opponentsFieldX, offsetY);
+        this.opponentFieldRenderer.renderMouseOver(c, mouseLocation.getX(), mouseLocation.getY(), opponentsFieldX, opponentsFieldY); 
         model.updateOpponentsFieldOnScreenData(new Vec2(opponentsFieldX, offsetY),
                 new Vec2(fieldsWidth, fieldsHeight));
-
+        
         c.setColor(0.7, 0.7, 0.7);
         c.drawRoundRect(frameWidth - 280 - offsetX, offsetY, 280, frameHeight - offsetY - 100, 5, 5);
 
@@ -81,9 +84,57 @@ public class GameView extends View<GameModel> {
      * @param number the number to be shown in 7seg-tiles
      */
     private void draw7segNumberAt(Canvas c, int x, int y, int number) {
-        c.drawString(x, y, Integer.toString(number));
-        // TODO implement a real (well sort of, it's still inside a computer) 7 segment display
-    }
+        //draws the Seven segment display for single digit numbers
+        if (number < 10){
+            c.fillRect(x, y, 26, 44);
+            String temp1 = String.valueOf(number % 10);
+            AssetRegistry.getTile("7seg." + temp1).renderAt(c,new Vec2(x + 3,y + 3) );
+        }
+        //draws the Seven segment display for double digit numbers
+        if ((number > 9) && (number < 100)){
+             c.fillRect(x, y, 26, 44);
+            String temp1 = String.valueOf(number % 10);
+            AssetRegistry.getTile("7seg." + temp1).renderAt(c,new Vec2(x + 3,y + 3) );
+
+            c.fillRect(x - 26, y, 26, 44);
+            String temp2 = String.valueOf(number / 10);
+            AssetRegistry.getTile("7seg." + temp2).renderAt(c,new Vec2(x + 3 - 26,y + 3) );
+        }
+        //draws the Seven segment display for triple digit numbers
+        if ((number >= 100) && (number < 1000)){    
+            c.fillRect(x, y, 26, 44); 
+            String temp1 = String.valueOf(number % 10);
+            AssetRegistry.getTile("7seg." + temp1).renderAt(c,new Vec2(x + 3,y + 3) );
+
+            c.fillRect(x - 26, y, 26, 44);
+            String temp2 = String.valueOf((number % 100)/10 );
+            AssetRegistry.getTile("7seg." + temp2).renderAt(c,new Vec2(x + 3 - 26,y + 3) );
+
+            c.fillRect(x - 26 - 26, y, 26, 44);
+            String temp3 = String.valueOf(number / 100);
+            AssetRegistry.getTile("7seg." + temp3).renderAt(c,new Vec2(x + 3 - 26 - 26,y + 3) );
+        }
+        //draws the Seven segment display for quadruple digit numbers
+        if (number >= 1000){
+            c.fillRect(x, y, 26, 44); 
+            String temp1 = String.valueOf(number % 10);
+            AssetRegistry.getTile("7seg." + temp1).renderAt(c,new Vec2(x + 3,y + 3) );
+
+            c.fillRect(x - 26, y, 26, 44);
+            String temp2 = String.valueOf((number % 100)/10 );
+            AssetRegistry.getTile("7seg." + temp2).renderAt(c,new Vec2(x + 3 - 26,y + 3) );
+
+            c.fillRect(x - 26 - 26, y, 26, 44);
+            String temp3 = String.valueOf((number % 1000)/100);
+            AssetRegistry.getTile("7seg." + temp3).renderAt(c,new Vec2(x + 3 - 26 - 26,y + 3) ); 
+
+            c.fillRect(x - 26 - 26 - 26 , y, 26, 44);
+            String temp4 = String.valueOf(number / 1000);
+            AssetRegistry.getTile("7seg." + temp4).renderAt(c,new Vec2(x + 3 - 26 - 26 - 26,y + 3) );
+        }
+      }
+        
+    
 
     @Override
     public void prepare() {

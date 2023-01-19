@@ -9,8 +9,6 @@ import de.uniluebeck.itm.schiffeversenken.game.model.GameModel;
 import de.uniluebeck.itm.schiffeversenken.game.model.Ship;
 import de.uniluebeck.itm.schiffeversenken.game.model.GameField;
 
-import java.io.ObjectInputStream.GetField;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -41,8 +39,8 @@ public class GameController extends Controller<GameModel> {
                 && positionOnOpponentsField.getY() < opponentsFieldDimensions.getY()) {
             final int res = Constants.TILE_SIZE;
         //Then we calculate where exactly the player clicked 
-            final int tileX = positionOnOpponentsField.getX()/res;
-            final int tileY = positionOnOpponentsField.getY()/res;
+            final int tileX = (positionOnOpponentsField.getX() + 8)/res;
+            final int tileY = (positionOnOpponentsField.getY() + 8)/res;
             final FieldTile fieldTile = model.getComputerPlayerField().getTileAt(tileX, tileY);
         //now we check if the tile has already been hit    
             if (!fieldTile.wasAlreadyBombarded()) {
@@ -54,8 +52,8 @@ public class GameController extends Controller<GameModel> {
     /**
      * Use this method to start the bombardment process, beginning with the player and then changing to the ai
      * 
-     * @param fieldTile
-     * @param model
+     * @param fieldTile the tile to bombard
+     * @param model the game model
      */
     public void startTheBombardment(FieldTile fieldTile, GameModel model){
         //first check if the player hit a ship
@@ -78,8 +76,8 @@ public class GameController extends Controller<GameModel> {
     /**
      * Use this method to activate the ai bombarding protocol which bombards the players field
      * 
-     * @param fieldTile
-     * @param model
+     * @param fieldTile the tile the ai is supposed to bombard
+     * @param model the game model
      */
     public void aiBombardment(FieldTile fieldTile, GameModel model){
         this.dispatchWork(new Runnable() {
