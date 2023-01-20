@@ -9,7 +9,7 @@ import de.uniluebeck.itm.schiffeversenken.engine.*;
 /**
  * This class provides graphical output for the game
  * 
- * @author leondietrich modified by B.Voss & F.Junghans
+ * @author leondietrich modified by B.Voss,  F.Junghans
  * 
  */
 public class GameView extends View<GameModel> {

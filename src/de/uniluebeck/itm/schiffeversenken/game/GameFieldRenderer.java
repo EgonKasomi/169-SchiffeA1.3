@@ -2,7 +2,6 @@ package de.uniluebeck.itm.schiffeversenken.game;
 
 import de.uniluebeck.itm.schiffeversenken.engine.*;
 import de.uniluebeck.itm.schiffeversenken.game.model.*;
-import java.util.Random;
 /**
  * Game field rendering methods.
  *
@@ -118,7 +117,7 @@ public class GameFieldRenderer {
         //initializes a new variable ship with the ship we are currently looking at
         Ship ship = field.getTileAt(x, y).getCorrespondingShip();
 
-        //initializes 4 variables we use to check wether another ship is positioned around the current one
+        //initializes 4 variables we use to check whether another ship is positioned around the current one
         boolean top = false;
         boolean bottom = false;
         boolean right = false;
