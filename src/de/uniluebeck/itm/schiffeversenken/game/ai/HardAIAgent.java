@@ -57,7 +57,7 @@ public class HardAIAgent extends AIAgent {
     final AtomicInteger y = new AtomicInteger(0);
 
     /**
-     * the threadsafe variable for tracking cases in the ship destruction 
+     * the atomic variable for tracking cases in the ship destruction 
      */
     final AtomicInteger z = new AtomicInteger(0);
 
@@ -83,7 +83,6 @@ public class HardAIAgent extends AIAgent {
 
     @Override
     public boolean performMove(GameField playersField) {
-        //System.out.println("der harte");
 
         final Random rnd = new Random(System.currentTimeMillis());
         final int fieldWidth = playersField.getSize().getX();
@@ -92,7 +91,6 @@ public class HardAIAgent extends AIAgent {
         FieldTile firstTile = playersField.getTileAt(1, 1);
         // starts the very first turn
         if (a == 0) {
-            //System.out.println("leider bin ich hier");
             //search for a random tile that is not occupied by a ship to set our "reset tile" to
             do{
             x.set(rnd.nextInt(fieldWidth));
@@ -111,15 +109,12 @@ public class HardAIAgent extends AIAgent {
             x.set(rnd.nextInt(fieldWidth));
             y.set(rnd.nextInt(fieldHeight));
             lastTile = playersField.getTileAt(x.get(), y.get());
-            //System.out.println(x.get() + " X standart sucher");
-            //System.out.println(y.get() + " Y Standart sucher");
             return bombardIfFree(lastTile, playersField);
         }
         // sets up the ship tracking if the last hit was on a ship
         if (this.lastTile.getCorrespondingShip() != null) {
             this.mainShipTile = this.lastTile;
-            System.out.println("tracker");
-            // checks wether the last hit on a tile has sunken the ship
+            // checks whether the last hit on a tile has sunken the ship
             if (this.lastTile.getCorrespondingShip().isSunken()) {
                 //if true it sets all tracking tiles back to the safe tile
                 this.mainShipTile = firstTile;
@@ -131,10 +126,9 @@ public class HardAIAgent extends AIAgent {
             }
         }
 
-        //when the ai hits a ship it goes into this case protocol and tracks its hits on that ship
+        //when the AI hits a ship it goes into this case protocol and tracks its hits on that ship
         //with those hits it deduces the location of the other ship parts after testing around the first hit
         if (this.mainShipTile.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
-            System.out.println("caseabfrage");
             switch (z.get()) {
                 //it checks right, left, up, down in that order
                 case 0:
@@ -278,7 +272,6 @@ public class HardAIAgent extends AIAgent {
         if ((this.mainShipTile.getTilestate() == FieldTileState.STATE_WATER
             || this.mainShipTile.getTilestate() == FieldTileState.STATE_MISSED)) {
             //this is just the standard random tile bombardment
-            //System.out.println("standart");
             do {
                 x.set(rnd.nextInt(fieldWidth));
                 y.set(rnd.nextInt(fieldHeight));
@@ -286,8 +279,6 @@ public class HardAIAgent extends AIAgent {
             } while (tile.wasAlreadyBombarded());
             this.lastTile = tile;
             this.mainShipTile = tile;
-            //System.out.println(x.get() + " X standart sucher");
-            //System.out.println(y.get() + " Y Standart sucher");
             return bombardIfFree(tile, playersField);
         }
         //if all else fails just return false
@@ -298,7 +289,7 @@ public class HardAIAgent extends AIAgent {
      * 
      * @param tileToBombard
      * @param field
-     * @return true when ai hit a ship with the bombardment 
+     * @return true when the AI hit a ship with the bombardment 
      */
     private boolean bombardIfFree(FieldTile tileToBombard, GameField field) {
         //reruns the performMove method to find a different tile to bombard
