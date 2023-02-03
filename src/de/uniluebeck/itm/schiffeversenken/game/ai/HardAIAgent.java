@@ -88,7 +88,7 @@ public class HardAIAgent extends AIAgent {
         final Random rnd = new Random(System.currentTimeMillis());
         final int fieldWidth = playersField.getSize().getX();
         final int fieldHeight = playersField.getSize().getY();
-        FieldTile tile;
+        FieldTile tile = playersField.getTileAt(0, 0);
         FieldTile firstTile = playersField.getTileAt(1, 1);
         // starts the very first turn
         if (a == 0) {
@@ -98,15 +98,18 @@ public class HardAIAgent extends AIAgent {
             x.set(rnd.nextInt(fieldWidth));
             y.set(rnd.nextInt(fieldHeight));
             firstTile = playersField.getTileAt(x.get(), y.get());
-            } while(firstTile.getTilestate() != FieldTileState.STATE_SHIP);
+            } while(firstTile.getTilestate() == FieldTileState.STATE_SHIP);
             //set the tracker tiles to the safe tile to avoid crashes
             this.mainShipTile = firstTile;
             this.anchorTileRight = firstTile;
             this.anchorTileLeft = firstTile;
             this.anchorTileUp = firstTile;
             this.anchorTileDown = firstTile;
+            tile = firstTile;
             //set a = 1 to ensure this first move protocol only gets called once
             this.a = 1;
+            x.set(rnd.nextInt(fieldWidth));
+            y.set(rnd.nextInt(fieldHeight));
             lastTile = playersField.getTileAt(x.get(), y.get());
             //System.out.println(x.get() + " X standart sucher");
             //System.out.println(y.get() + " Y Standart sucher");
@@ -130,81 +133,105 @@ public class HardAIAgent extends AIAgent {
 
         //when the ai hits a ship it goes into this case protocol and tracks its hits on that ship
         //with those hits it deduces the location of the other ship parts after testing around the first hit
-        if (this.mainShipTile.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
+        if (this.mainShipTile.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
             System.out.println("caseabfrage");
             switch (z.get()) {
                 //it checks right, left, up, down in that order
                 case 0:
-                    tile = playersField.getTileAt(x.get() + 1, y.get());
-                    this.lastTile = tile;
+                    //checks for out of bounds exceptions
+                    if (x.get() != 14){
+                        tile = playersField.getTileAt(x.get() + 1, y.get());
+                        this.lastTile = tile;}else{this.lastTile = firstTile;}
                     z.getAndAdd(1);
                     return bombardIfFree(tile, playersField);
                 case 1:
-                    if (this.lastTile.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
+                    if (this.lastTile.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                         this.anchorTileRight = this.lastTile;
                     }
-                    tile = playersField.getTileAt(x.get() - 1, y.get());
-                    this.lastTile = tile;
+                    //checks for out of bounds exceptions
+                    if ( x.get() != 0 ){
+                        tile = playersField.getTileAt(x.get() - 1, y.get());
+                        this.lastTile = tile;}else{this.lastTile = firstTile;}
                     z.getAndAdd(1);
                     return bombardIfFree(tile, playersField);
                 case 2:
-                    if (this.lastTile.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
+                    if (this.lastTile.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                         this.anchorTileLeft = this.lastTile;
                     }
-                    tile = playersField.getTileAt(x.get(), y.get() - 1);
-                    this.lastTile = tile;
+                    //checks for out of bounds exceptions
+                    if (y.get() != 0){
+                        tile = playersField.getTileAt(x.get(), y.get() - 1);
+                        this.lastTile = tile;}else{this.lastTile = firstTile;}
                     z.getAndAdd(1);
                     return bombardIfFree(tile, playersField);
                 case 3:
-                    if (this.lastTile.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
+                    if (this.lastTile.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                         this.anchorTileUp = this.lastTile;
                     }
-                    tile = playersField.getTileAt(x.get(), y.get() + 1);
-                    this.lastTile = tile;
+                    //checks for out of bounds exceptions
+                    if (y.get() != 14){
+                        tile = playersField.getTileAt(x.get(), y.get() + 1);
+                        this.lastTile = tile;}else{this.lastTile = firstTile;}
                     z.getAndAdd(1);
                     return bombardIfFree(tile, playersField);
                 //now that it has checked around the first hit it can deduce the location of the other parts with some certainty    
                 case 4:
-                    if (this.lastTile.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
+                    if (this.lastTile.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                         this.anchorTileDown = this.lastTile;
                     }
                     //here goes to destroy a horizontal ship
-                    if (anchorTileRight.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
-                        if (anchorTileLeft.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
-                            tile = playersField.getTileAt(x.get() + 2, y.get());
-                            this.lastTile = tile;
-                            z.getAndAdd(1);
+                    if (!mainShipTile.getCorrespondingShip().isVertical()){
+                        if (anchorTileRight.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
+                            if (anchorTileLeft.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
+                                //checks for out of bounds exceptions
+                                if (x.get() != 13 && x.get() != 14){
+                                    tile = playersField.getTileAt(x.get() + 2, y.get());
+                                    this.lastTile = tile;}else{this.lastTile = firstTile;}
+                                z.getAndAdd(1);
+                                return bombardIfFree(tile, playersField);
+                            }
+                            //checks for out of bounds exceptions
+                            if (x.get() != 14 && x.get() != 13 ){
+                                tile = playersField.getTileAt(x.get() + 2, y.get());
+                                this.lastTile = tile;}else{this.lastTile = firstTile;}
+                            z.getAndAdd(2);
                             return bombardIfFree(tile, playersField);
                         }
-                        tile = playersField.getTileAt(x.get() + 2, y.get());
-                        this.lastTile = tile;
-                        z.getAndAdd(2);
-                        return bombardIfFree(tile, playersField);
-                    }
-                    if (anchorTileLeft.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
-                        tile = playersField.getTileAt(x.get() - 2, y.get());
-                        this.lastTile = tile;
-                        z.getAndAdd(3);
-                        return bombardIfFree(tile, playersField);
-                    }
+                        if (anchorTileLeft.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
+                            //checks for out of bounds exceptions
+                            if (x.get() != 1 && x.get() != 0 ){
+                                tile = playersField.getTileAt(x.get() - 2, y.get());
+                                this.lastTile = tile;}else{this.lastTile = firstTile;}
+                            z.getAndAdd(3);
+                            return bombardIfFree(tile, playersField);
+                        }
+                    }    
                     //here it goes to destroy a vertical ship
-                    if (anchorTileUp.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
-                        if (anchorTileDown.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
-                            tile = playersField.getTileAt(x.get(), y.get() - 2);
-                            this.lastTile = tile;
-                            z.getAndAdd(4);
+                    if (mainShipTile.getCorrespondingShip().isVertical()){
+                        if (anchorTileUp.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
+                            if (anchorTileDown.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
+                                //checks for out of bounds exceptions
+                                if ( y.get() != 0 && y.get() != 1){
+                                    tile = playersField.getTileAt(x.get(), y.get() - 2);
+                                    this.lastTile = tile;}else{this.lastTile = firstTile;}
+                                z.getAndAdd(4);
+                                return bombardIfFree(tile, playersField);
+                            }
+                            //checks for out of bounds exceptions
+                            if ( y.get() != 0 && y.get() != 1){
+                                tile = playersField.getTileAt(x.get(), y.get() - 2);
+                                this.lastTile = tile;}else{this.lastTile = firstTile;}
+                            z.getAndAdd(5);
                             return bombardIfFree(tile, playersField);
                         }
-                        tile = playersField.getTileAt(x.get(), y.get() - 2);
-                        this.lastTile = tile;
-                        z.getAndAdd(5);
-                        return bombardIfFree(tile, playersField);
-                    }
-                    if (anchorTileLeft.getTilestate() == FieldTile.FieldTileState.STATE_SHIP_HIT) {
-                        tile = playersField.getTileAt(x.get(), y.get() + 2);
-                        this.lastTile = tile;
-                        z.getAndAdd(6);
-                        return bombardIfFree(tile, playersField);
+                        if (anchorTileLeft.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
+                            //checks for out of bounds exceptions
+                            if ( y.get() != 14 && y.get() != 13){
+                                tile = playersField.getTileAt(x.get(), y.get() + 2);
+                                this.lastTile = tile;}else{this.lastTile = firstTile;}
+                            z.getAndAdd(6);
+                            return bombardIfFree(tile, playersField);
+                        }
                     }
                     //here it finds the last parts of any ship
                 case 5:
@@ -248,13 +275,15 @@ public class HardAIAgent extends AIAgent {
         }
 
         // routine to get into when there is no ship to sink currently
-        if ((this.mainShipTile.getTilestate() == FieldTile.FieldTileState.STATE_WATER
-            || this.mainShipTile.getTilestate() == FieldTile.FieldTileState.STATE_MISSED)) {
+        if ((this.mainShipTile.getTilestate() == FieldTileState.STATE_WATER
+            || this.mainShipTile.getTilestate() == FieldTileState.STATE_MISSED)) {
             //this is just the standard random tile bombardment
             //System.out.println("standart");
-            x.set(rnd.nextInt(fieldWidth));
-            y.set(rnd.nextInt(fieldHeight));
-            tile = playersField.getTileAt(x.get(), y.get());
+            do {
+                x.set(rnd.nextInt(fieldWidth));
+                y.set(rnd.nextInt(fieldHeight));
+                tile = playersField.getTileAt(x.get(), y.get());
+            } while (tile.wasAlreadyBombarded());
             this.lastTile = tile;
             this.mainShipTile = tile;
             //System.out.println(x.get() + " X standart sucher");
