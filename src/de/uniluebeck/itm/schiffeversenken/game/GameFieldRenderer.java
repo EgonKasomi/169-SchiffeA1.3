@@ -181,7 +181,7 @@ public class GameFieldRenderer {
         int width  = field.getSize().getX()*tileSize;
         int height = field.getSize().getY()*tileSize;
         //check if the mouse position is within the opponents field
-        if (!((x >= width) && (y >=  35) 
+        if (!((x >= width + 20) && (y >=  35) 
             && (x < fieldX + width) && (y < height + 30))){
             return;
         }
@@ -201,8 +201,8 @@ public class GameFieldRenderer {
         final Vec2 tilePositionArrow2 = new Vec2((tileX*tileSize + fieldX ) + (tileSize/2), (tileY*tileSize) + (tileSize/2) * (-1));
         
         //calculates a small repeating number by using modulo on a very large number that is generated with the current time
-        final int animationOffsetter = ((int)System.currentTimeMillis()/250)*2;
-        final int animationOffset = (int) (animationOffsetter % 10);
+        final int animationOffSetter = ((int)System.currentTimeMillis()/250)*2;
+        final int animationOffset = (int) (animationOffSetter % 10);
         Vec2 animationOffsetTheVector = new Vec2(animationOffset * (-1), animationOffset);
         
         //selects the arrow asset and renders at the previously specified location

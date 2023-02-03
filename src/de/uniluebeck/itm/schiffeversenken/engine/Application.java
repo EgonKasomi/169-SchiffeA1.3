@@ -92,7 +92,6 @@ public final class Application {
 	 * @param c The GUIContext
 	 */
 	public static void setup(GUIContext c) {
-		// TODO make constructor once extracted class
 		context = c;
 		context.setup();
 		context.setInputDebugModeEnabled(true);

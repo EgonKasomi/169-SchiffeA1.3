@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class handles user input during the game
- * @author leondietrich modified by B. Voss, F. Junnghans
+ * @author leondietrich modified by B. Voss, F. Junghans
  * 
  *
  */
@@ -39,8 +39,8 @@ public class GameController extends Controller<GameModel> {
                 && positionOnOpponentsField.getY() < opponentsFieldDimensions.getY()) {
             final int res = Constants.TILE_SIZE;
         //Then we calculate where exactly the player clicked 
-            final int tileX = (positionOnOpponentsField.getX() + 8)/res;
-            final int tileY = (positionOnOpponentsField.getY() + 8)/res;
+            final int tileX = (positionOnOpponentsField.getX())/res;
+            final int tileY = (positionOnOpponentsField.getY())/res;
             final FieldTile fieldTile = model.getComputerPlayerField().getTileAt(tileX, tileY);
         //now we check if the tile has already been hit    
             if (!fieldTile.wasAlreadyBombarded()) {

@@ -50,5 +50,5 @@ public class EasyAIAgent extends AIAgent {
     @Override
     public FieldTile getLastAttackedTile() {
         return this.lastTile;
-    }
+    }   
 }

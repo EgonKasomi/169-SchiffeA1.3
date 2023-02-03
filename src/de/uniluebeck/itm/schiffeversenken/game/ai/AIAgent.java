@@ -4,13 +4,14 @@ import de.uniluebeck.itm.schiffeversenken.game.model.FieldTile;
 import de.uniluebeck.itm.schiffeversenken.game.model.GameField;
 import de.uniluebeck.itm.schiffeversenken.game.model.Ruleset;
 import de.uniluebeck.itm.schiffeversenken.game.model.Ship;
+import de.uniluebeck.itm.schiffeversenken.game.model.GameModel;
 
 import java.util.Random;
 
 /**
  * This class provides the blueprint and basic behavior for every AI agent
  * 
- * @author leondietrich
+ * @author leondietrich modified by B. Voss, F. Junghans
  *
  */
 public abstract class AIAgent {
@@ -44,7 +45,7 @@ public abstract class AIAgent {
     public abstract boolean performMove(GameField playersField);
 
     /**
-     * Call this method from within a setup method in order to conviniently place your ships.
+     * Call this method from within a setup method in order to conveniently place your ships.
      * @param r The rule set to obey
      * @param f The field to place the ships on
      */
@@ -62,10 +63,10 @@ public abstract class AIAgent {
 
         final Random rnd = new Random(System.currentTimeMillis());
 
-        for (int shipsLenghtIndex = 0; shipsLenghtIndex < shipsToBePlaced.length; shipsLenghtIndex++) {
-            for (int ship = 0; ship < shipsToBePlaced[shipsLenghtIndex]; ship++) {
+        for (int shipsLengthIndex = 0; shipsLengthIndex < shipsToBePlaced.length; shipsLengthIndex++) {
+            for (int ship = 0; ship < shipsToBePlaced[shipsLengthIndex]; ship++) {
                 while (!checkAndPlace(f, rnd.nextBoolean(), rnd.nextInt(width),
-                        rnd.nextInt(height), shipsLenghtIndex + 1, width, height));
+                        rnd.nextInt(height), shipsLengthIndex + 1, width, height, r.getSocialDistance()));
             }
         }
     }
@@ -81,11 +82,56 @@ public abstract class AIAgent {
      * @param height the height of the AI player field
      * @return Has the ship successfully been placed?
      */
-    private boolean checkAndPlace(GameField f, boolean up, int x, int y, int length, int width, int height) {
+    private boolean checkAndPlace(GameField f, boolean up, int x, int y, int length, int width, int height, boolean covid) {
         if ((up && y + length > height) || (!up && x + length > width)) {
             return false;
         }
 
+        if (covid){
+                //checks for orientation of the ship, goes into this path if the ship is vertical
+            if (up) {
+                //nested for loop to parse over the 3xShipLength field from top left to bottom right
+                for (int j = -1; j < 2; j++){
+                    for (int currentShipsX = x + j, currentShipsY = y - 1, i = 0; i < length + 2; i++){
+                        //sanity check for out of bounds exceptions if the ship is placed close to the field borders
+                        if (((currentShipsX < 15)&&(currentShipsX >= 0)) 
+                        && ((currentShipsY < 15)&&(currentShipsY >= 0))) {
+                            //gets the tile at the current position and checks for other ships
+                            final FieldTile t = f.getTileAt(currentShipsX, currentShipsY);
+                            if (t.getTilestate() != FieldTile.FieldTileState.STATE_WATER || t.getCorrespondingShip() != null) {
+                                return false;
+                            }
+                            currentShipsY++;
+                        }
+                        else {
+                            currentShipsY++;
+                            }		
+                    }
+                }	
+            }
+            //goes into this path if the ship is horizontal
+            else {
+                //nested for loop to parse over the 3xShipLength field from top left to bottom right
+                for (int j = -1; j < 2; j++){
+                    for (int currentShipsX = x - 1, currentShipsY = y + j, i = 0; i < length + 2; i++){
+                        //sanity check for out of bounds exceptions if the ship is placed close to the field borders
+                        if (((currentShipsX < 15)&&(currentShipsX >= 0)) 
+                        && ((currentShipsY < 15)&&(currentShipsY >= 0))) {
+                            //gets the tile at the current position and checks for other ships
+                            final FieldTile t = f.getTileAt(currentShipsX, currentShipsY);
+                            if (t.getTilestate() != FieldTile.FieldTileState.STATE_WATER || t.getCorrespondingShip() != null) {
+                                return false;
+                            }
+                            currentShipsX++;
+                        }
+                        else {
+                            currentShipsX++;
+                            }		
+                    }
+                }	 
+            }
+        }
+    else{       
         for(int currentShipsX = x, currentShipsY = y, i = 0; i < length; i++) {
             final FieldTile t = f.getTileAt(currentShipsX, currentShipsY);
             if (t.getTilestate() != FieldTile.FieldTileState.STATE_WATER || t.getCorrespondingShip() != null) {
@@ -97,7 +143,7 @@ public abstract class AIAgent {
                 currentShipsX++;
             }
         }
-
+    }
         final Ship shipToPlace = new Ship(length, up);
         f.placeShip(x, y, length, up, shipToPlace);
         return true;

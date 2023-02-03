@@ -7,7 +7,7 @@ import de.uniluebeck.itm.schiffeversenken.game.model.*;
 
 /**
  * This class enables the player to place ships on the field based on the provided ruleset.
- * @author leondietrich
+ * @author leondietrich, modified by B.Voss, F. Junghans
  *
  */
 public class ShipPlacementMenuScene extends Scene {
@@ -278,13 +278,70 @@ public class ShipPlacementMenuScene extends Scene {
 			} else {
 				currentShipsX++;
 			}
-		}
+		} 
 
+		//checks for covid
+		if (ruleset.getSocialDistance()){
+			if (policeEnforcement(x, y)){
+				return;
+			}
+		}
 		// Then we need to create a ship and place it
 		final Ship shipToPlace = new Ship(this.currentSelectedShipsLength, this.currentOrientationIsUp);
 		this.field.placeShip(x, y, this.currentSelectedShipsLength, this.currentOrientationIsUp, shipToPlace);
 		this.placedShips[this.currentSelectedShipsLength - 1]++;
 		this.currentSelectedShipsLength = 0;
+	}
+
+	/**
+	 * Use this method to enforce social distancing laws
+	 * @return whether the police has to get involved and stop the placement
+	 */
+	private boolean policeEnforcement(int x, int y) {
+		//checks for orientation of the ship, goes into this path if the ship is vertical
+		if (this.currentOrientationIsUp) {
+			//nested for loop to parse over the 3xShipLength field from top left to bottom right
+			for (int j = -1; j < 2; j++){
+				for (int currentShipsX = x + j, currentShipsY = y - 1, i = 0; i < this.currentSelectedShipsLength + 2; i++){
+					//sanity check for out of bounds exceptions if the ship is placed close to the field borders
+					if (((currentShipsX < 15)&&(currentShipsX >= 0)) 
+					 && ((currentShipsY < 15)&&(currentShipsY >= 0))) {
+						//gets the tile at the current position and checks for other ships
+						final FieldTile t = this.field.getTileAt(currentShipsX, currentShipsY);
+						if (t.getCorrespondingShip() != null) {
+							return true;
+						}
+						currentShipsY++;
+					}
+					else {
+					currentShipsY++;
+					}	
+				}
+			}	
+		}
+		//goes into this path if the ship is horizontal
+		else {
+			//nested for loop to parse over the 3xShipLength field from top left to bottom right
+			for (int j = -1; j < 2; j++){
+				for (int currentShipsX = x - 1, currentShipsY = y + j, i = 0; i < this.currentSelectedShipsLength + 2; i++){
+					//sanity check for out of bounds exceptions if the ship is placed close to the field borders
+					if (((currentShipsX < 15)&&(currentShipsX >= 0)) 
+					 && ((currentShipsY < 15)&&(currentShipsY >= 0))) {
+						//gets the tile at the current position and checks for other ships
+						final FieldTile t = this.field.getTileAt(currentShipsX, currentShipsY);
+						if (t.getCorrespondingShip() != null) {
+							return true;
+						}
+						currentShipsX++;
+					}
+					else{
+					currentShipsX++;
+					}	
+				}
+			}	 
+		}
+		//if no ships were found in the surrounding area returns false and ends the method
+		return false;
 	}
 
 	/**
@@ -307,7 +364,8 @@ public class ShipPlacementMenuScene extends Scene {
 						break;
 					case 1:
 					case 2:
-						throw new RuntimeException("Dieser Schwierigkeitsgrad wurde von dir noch nicht implementiert.");
+						ag = new HardAIAgent(0);
+						break;
 				}
 				final GameField agentsField = new GameField(ruleset.getGameFieldSize());
 				ag.setup(ruleset, agentsField);

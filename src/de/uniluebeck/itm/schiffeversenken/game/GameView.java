@@ -31,8 +31,8 @@ public class GameView extends View<GameModel> {
 	public GameView(GameModel m) {
         super(m);
         this.fieldRenderer = new GameFieldRenderer(this.getModelInstance().getHumanPlayerField());
-        this.opponentFieldRenderer = new GameFieldRenderer(this.getModelInstance().getComputerPlayerField());
-        //this.opponentFieldRenderer = new HitMissRenderer(this.getModelInstance().getComputerPlayerField());
+        //this.opponentFieldRenderer = new GameFieldRenderer(this.getModelInstance().getComputerPlayerField());
+        this.opponentFieldRenderer = new HitMissRenderer(this.getModelInstance().getComputerPlayerField());
     }
 
     @Override
@@ -59,7 +59,6 @@ public class GameView extends View<GameModel> {
         final int[] numbers = new int[]{model.getRoundCounter(), model.getPlayerPoints(), model.getAiPoints()};
         final String[] labels = new String[]{"Round: ", "Your points", "Computers points"};
         for (int i = 0; i < numbers.length; i++) {
-            // Irgendwie muss man da noch dinge mit dem Offset machen...
             draw7segNumberAt(c, frameWidth - offsetX - 45,
                     offsetY + 25 + (i * 50), numbers[i]);
             c.drawString(frameWidth - 270 - offsetX, offsetY + 35 + (i * 50), labels[i]);
