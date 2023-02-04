@@ -304,8 +304,8 @@ public class ShipPlacementMenuScene extends Scene {
 			for (int j = -1; j < 2; j++){
 				for (int currentShipsX = x + j, currentShipsY = y - 1, i = 0; i < this.currentSelectedShipsLength + 2; i++){
 					//sanity check for out of bounds exceptions if the ship is placed close to the field borders
-					if (((currentShipsX < 15)&&(currentShipsX >= 0)) 
-					 && ((currentShipsY < 15)&&(currentShipsY >= 0))) {
+					if (((currentShipsX < field.getSize().getX())&&(currentShipsX >= 0)) 
+					 && ((currentShipsY < field.getSize().getY())&&(currentShipsY >= 0))) {
 						//gets the tile at the current position and checks for other ships
 						final FieldTile t = this.field.getTileAt(currentShipsX, currentShipsY);
 						if (t.getCorrespondingShip() != null) {
@@ -325,8 +325,8 @@ public class ShipPlacementMenuScene extends Scene {
 			for (int j = -1; j < 2; j++){
 				for (int currentShipsX = x - 1, currentShipsY = y + j, i = 0; i < this.currentSelectedShipsLength + 2; i++){
 					//sanity check for out of bounds exceptions if the ship is placed close to the field borders
-					if (((currentShipsX < 15)&&(currentShipsX >= 0)) 
-					 && ((currentShipsY < 15)&&(currentShipsY >= 0))) {
+					if (((currentShipsX < field.getSize().getX())&&(currentShipsX >= 0)) 
+					 && ((currentShipsY < field.getSize().getY())&&(currentShipsY >= 0))) {
 						//gets the tile at the current position and checks for other ships
 						final FieldTile t = this.field.getTileAt(currentShipsX, currentShipsY);
 						if (t.getCorrespondingShip() != null) {
