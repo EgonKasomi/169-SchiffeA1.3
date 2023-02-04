@@ -80,6 +80,7 @@ public abstract class AIAgent {
      * @param length the length of the ship
      * @param width the width of the AI player field
      * @param height the height of the AI player field
+     * @param covid the information whether social distancing is needed
      * @return Has the ship successfully been placed?
      */
     private boolean checkAndPlace(GameField f, boolean up, int x, int y, int length, int width, int height, boolean covid) {
@@ -115,8 +116,8 @@ public abstract class AIAgent {
                 for (int j = -1; j < 2; j++){
                     for (int currentShipsX = x - 1, currentShipsY = y + j, i = 0; i < length + 2; i++){
                         //sanity check for out of bounds exceptions if the ship is placed close to the field borders
-                        if (((currentShipsX < 15)&&(currentShipsX >= 0)) 
-                        && ((currentShipsY < 15)&&(currentShipsY >= 0))) {
+                        if (((currentShipsX < f.getSize().getX())&&(currentShipsX >= 0)) 
+                        && ((currentShipsY < f.getSize().getY())&&(currentShipsY >= 0))) {
                             //gets the tile at the current position and checks for other ships
                             final FieldTile t = f.getTileAt(currentShipsX, currentShipsY);
                             if (t.getTilestate() != FieldTile.FieldTileState.STATE_WATER || t.getCorrespondingShip() != null) {
