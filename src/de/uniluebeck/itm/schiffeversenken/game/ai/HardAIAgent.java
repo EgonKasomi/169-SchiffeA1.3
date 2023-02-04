@@ -133,7 +133,7 @@ public class HardAIAgent extends AIAgent {
                 //it checks right, left, up, down in that order
                 case 0:
                     //checks for out of bounds exceptions
-                    if (x.get() != fieldWidth){
+                    if (x.get() < fieldWidth - 1){
                         tile = playersField.getTileAt(x.get() + 1, y.get());
                         this.lastTile = tile;}else{this.lastTile = firstTile;}
                     z.getAndAdd(1);
@@ -143,7 +143,7 @@ public class HardAIAgent extends AIAgent {
                         this.anchorTileRight = this.lastTile;
                     }
                     //checks for out of bounds exceptions
-                    if ( x.get() != 0 ){
+                    if ( x.get() > 0 ){
                         tile = playersField.getTileAt(x.get() - 1, y.get());
                         this.lastTile = tile;}else{this.lastTile = firstTile;}
                     z.getAndAdd(1);
@@ -153,7 +153,7 @@ public class HardAIAgent extends AIAgent {
                         this.anchorTileLeft = this.lastTile;
                     }
                     //checks for out of bounds exceptions
-                    if (y.get() != 0){
+                    if (y.get() > 0){
                         tile = playersField.getTileAt(x.get(), y.get() - 1);
                         this.lastTile = tile;}else{this.lastTile = firstTile;}
                     z.getAndAdd(1);
@@ -163,7 +163,7 @@ public class HardAIAgent extends AIAgent {
                         this.anchorTileUp = this.lastTile;
                     }
                     //checks for out of bounds exceptions
-                    if (y.get() != fieldHeight){
+                    if (y.get() < fieldHeight - 1){
                         tile = playersField.getTileAt(x.get(), y.get() + 1);
                         this.lastTile = tile;}else{this.lastTile = firstTile;}
                     z.getAndAdd(1);
@@ -178,14 +178,14 @@ public class HardAIAgent extends AIAgent {
                         if (anchorTileRight.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                             if (anchorTileLeft.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                                 //checks for out of bounds exceptions
-                                if (x.get() != fieldWidth - 1 && x.get() != fieldWidth){
+                                if (x.get() < fieldWidth - 2 ){
                                     tile = playersField.getTileAt(x.get() + 2, y.get());
                                     this.lastTile = tile;}else{this.lastTile = firstTile;}
                                 z.getAndAdd(1);
                                 return bombardIfFree(tile, playersField);
                             }
                             //checks for out of bounds exceptions
-                            if (x.get() != fieldWidth && x.get() != fieldWidth - 1 ){
+                            if (x.get() < fieldWidth - 2 ){
                                 tile = playersField.getTileAt(x.get() + 2, y.get());
                                 this.lastTile = tile;}else{this.lastTile = firstTile;}
                             z.getAndAdd(2);
@@ -193,7 +193,7 @@ public class HardAIAgent extends AIAgent {
                         }
                         if (anchorTileLeft.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                             //checks for out of bounds exceptions
-                            if (x.get() != 1 && x.get() != 0 ){
+                            if (x.get() > 1 ){
                                 tile = playersField.getTileAt(x.get() - 2, y.get());
                                 this.lastTile = tile;}else{this.lastTile = firstTile;}
                             z.getAndAdd(3);
@@ -205,22 +205,22 @@ public class HardAIAgent extends AIAgent {
                         if (anchorTileUp.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                             if (anchorTileDown.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                                 //checks for out of bounds exceptions
-                                if ( y.get() != 0 && y.get() != 1){
+                                if (y.get() > 1){
                                     tile = playersField.getTileAt(x.get(), y.get() - 2);
                                     this.lastTile = tile;}else{this.lastTile = firstTile;}
                                 z.getAndAdd(4);
                                 return bombardIfFree(tile, playersField);
                             }
                             //checks for out of bounds exceptions
-                            if ( y.get() != 0 && y.get() != 1){
+                            if (y.get() > 1){
                                 tile = playersField.getTileAt(x.get(), y.get() - 2);
                                 this.lastTile = tile;}else{this.lastTile = firstTile;}
                             z.getAndAdd(5);
                             return bombardIfFree(tile, playersField);
                         }
-                        if (anchorTileLeft.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
+                        if (anchorTileDown.getTilestate() == FieldTileState.STATE_SHIP_HIT) {
                             //checks for out of bounds exceptions
-                            if ( y.get() != fieldHeight && y.get() != fieldHeight - 1){
+                            if (y.get() < fieldHeight - 2){
                                 tile = playersField.getTileAt(x.get(), y.get() + 2);
                                 this.lastTile = tile;}else{this.lastTile = firstTile;}
                             z.getAndAdd(6);
@@ -254,16 +254,20 @@ public class HardAIAgent extends AIAgent {
                     z.getAndAdd(2);
                     return bombardIfFree(tile, playersField);
                 case 10:
-                    tile = playersField.getTileAt(x.get(), y.get() - 3);
+                    tile = playersField.getTileAt(x.get(), y.get() + 3);
                     this.lastTile = tile;
                     z.getAndAdd(1);
                     return bombardIfFree(tile, playersField);
                 //this is the catcher for cases where its trying to bombard a already
                 //bombarded tile while locked in a specific case to avoid a stackoverflow  
                 case 11:
+                    do{
                     x.set(rnd.nextInt(fieldWidth));
                     y.set(rnd.nextInt(fieldHeight));  
-                    tile = playersField.getTileAt(x.get(), y.get());   
+                    tile = playersField.getTileAt(x.get(), y.get());
+                    }while (tile.wasAlreadyBombarded());  
+                    this.lastTile = tile;
+                    this.mainShipTile = firstTile;
                     return bombardIfFree(tile, playersField); 
             }
         }
